@@ -1,3 +1,11 @@
+/*!
+ * Slidfast v0.0.1
+ * www.slidfast.com
+ *
+ * Copyright (c) Wesley Hales
+ * Available under the MIT licenses
+ */
+
 //Known issues:
 //1. When page "flip" is activated after accelerating a touch event,
 // a double acceleration glitch occurs when flipping to the back page
