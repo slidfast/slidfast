@@ -1,0 +1,108 @@
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font: 80% / 1.5em "Lucida Sans Unicode", "Lucida Grande", Geneva, Verdana, Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+/*************************************************
+Mobile Device Page Setup
+*************************************************/
+
+#browser {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#page-container {
+    position:absolute;
+    width:100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /*top: 0;*/
+    background-color: #fff;
+    /*activate the GPU for compositing each page */
+    /*-webkit-transform: translate3d(0, 0, 0);*/
+}
+
+/*************************************************
+UX Utils
+*************************************************/
+
+.none {
+    display: none
+}
+
+.hide-it {
+    opacity: 0;
+}
+
+.show {
+    opacity: 100;
+}
+
+.transition {
+    -moz-transition-duration: .5s;
+    -webkit-transition-duration: .5s;
+    -o-transition-duration: .5s;
+}
+
+/*************************************************
+Flip Transition
+*************************************************/
+
+#back,
+#front {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    -webkit-transition-duration: .5s;
+    -webkit-transform-style: preserve-3d;
+}
+
+.normal {
+    -webkit-transform: rotateY(0deg);
+}
+
+.flipped {
+    -webkit-user-select: element;
+    -webkit-transform: rotateY(180deg);
+}
+
+/*************************************************
+Device Specific Styles
+*************************************************/
+.stage-center {
+    left: 0;
+    top:0;
+}
+
+.stage-left,
+.stage-right{
+    height:100%;
+    overflow: hidden;
+}
+
+.stage-left {
+    left: -100%;
+}
+
+.stage-right {
+    left: 100%;
+}

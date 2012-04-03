@@ -1,0 +1,40 @@
+body {
+    background-color: #000;
+}
+
+
+/*----------------------------nav bar*/
+nav.primary > ul {
+    text-align: center;
+}
+
+nav.primary > ul li {
+    list-style: none;
+    display: inline;
+    padding: 5px;
+    border: 1px solid #fff;
+}
+
+nav.primary > ul li a {
+    color: #fff;
+}
+
+/*----------------------------pages*/
+
+#home-page {
+    background-color: #6495ed;
+}
+
+#products-page {
+    background-color: #a52a2a;
+}
+
+#about-page {
+    background-color: #006400;
+}
+
+#contact-page {
+    background-color: #ff1493;
+    width: 100%;
+    height: 100%;
+}
