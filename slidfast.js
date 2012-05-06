@@ -635,7 +635,21 @@
             },
 
             error : function(error){
-               console.log('error ' + error);
+               switch(error.code)
+               {
+                  case error.TIMEOUT:
+                     console.log('Timeout');
+                     break;
+                  case error.POSITION_UNAVAILABLE:
+                     console.log('Position unavailable');
+                     break;
+                  case error.PERMISSION_DENIED:
+                     console.log('Permission denied');
+                     break;
+                  case error.UNKNOWN_ERROR:
+                     console.log('Unknown error');
+                     break;
+               }
             }
 
         };
