@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<link rel="stylesheet" media="all" href="../demo.css" />
+<link rel="stylesheet" media="all" href="../../slidfast.css" />
+<script type="text/javascript" src="../../slidfast.js" ></script>
+<script type="text/javascript">
+
+slidfast({
+   defaultPageID:'home-page',
+   touchEnabled: true,
+   geo: {on:true,track:true,interval:10000}
+});
+
+
+</script>
+
+</head>
+<body>
+<div id="browser">
+    <nav class="primary">
+        <ul>
+            <li><a href="#sf-home-page" onclick="slidfast.ui.slideTo('home-page')">Home</a></li>
+            <li><a href="#sf-products-page" onclick="slidfast.ui.slideTo('products-page')">Products</a></li>
+            <li><a href="#sf-about-page" onclick="slidfast.ui.slideTo('about-page')">About</a></li>
+            <li><a href="#sf-contact-page" onclick="slidfast.ui.flip('contact-page')">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div id="page-container">
+
+        <div id="front" class="normal">
+
+            <div id="home-page" class="page">
+                <h1>Home Page</h1>
+                <a href="demo/home-detail.html" class="fetch">Find out more about the home page!</a>
+            </div>
+
+            <div id="products-page" class="page stage-right">
+                <h1>Products Page</h1>
+                <a href="demo/product-listing.html" class="fetch">We got some product listings fer ya!</a>
+            </div>
+
+            <div id="about-page" class="page stage-left">
+                <h1>About Page</h1>
+                <a href="demo/about-cto.html">You know you want to know more about us!</a>
+            </div>
+        </div>
+        <div id="back" class="flipped">
+
+            <div id="contact-page" class="page">
+                <h1>Contact Page</h1>
+                <a href="demo/contact-map.html" class="fetch">Check out our map!</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
