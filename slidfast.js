@@ -35,6 +35,8 @@
         
         optimizeNetwork = false,
 
+        geo = {on : true, track : false},
+
         isReady = false,
 
         flipped = false;
@@ -50,12 +52,14 @@
                         touchEnabled = options.touchEnabled;
                         singlePageModel = options.singlePageModel;
                         optimizeNetwork = options.optimizeNetwork;
+                        geo = options.geo;
                     }
                 }catch(e){
                     alert('Problem with startup options. You must define the page ID at a min. \n Error:' + e)
                 }
 
                 slidfast.core.hideURLBar();
+                //hash change
                 slidfast.core.locationChange();
 
                 if(touchEnabled){
@@ -69,9 +73,12 @@
                     if(singlePageModel){
                         slidfast.core.fetchAndCache(true);
                     }
-                }    
-                
-                
+                }
+
+                if(geo.on){
+                   slidfast.location.init(geo);
+                }
+
             },
 
             hideURLBar: function() {
@@ -475,8 +482,9 @@
 
         };
 
+        var disabledLinks;
         slidfast.network = slidfast.prototype = {
-            
+
             init : function(){
                 window.addEventListener('load', function(e) {
                    if (navigator.onLine) {
@@ -580,6 +588,79 @@
             
         };
 
+        var geolocationID, currentPosition, interval;
+        slidfast.location = slidfast.prototype = {
+
+            init : function(geo){
+                   if (slidfast.html5e.supports_geolocation()) {
+                      if(geo.track){
+                        slidfast.location.track();
+                        interval = geo.interval ? geo.interval : 10000;
+                      }else{
+                        if(currentPosition == undefined){
+                           navigator.geolocation.getCurrentPosition(function(position){currentPosition = position},slidfast.location.error);
+                        }
+                      }
+
+                   }else{
+                      console.log('Geolocation not supported on this device.');
+                   }
+            },
+
+            track : function(){
+               //workaround for iOS5 "watchPosition" bug https://bugs.webkit.org/show_bug.cgi?id=43956
+                 var count = 0;
+                 geolocationID = window.setInterval(
+                   function () {
+                        count++;
+                      console.log(count);
+                        if (count > 3) {  //when count reaches a number, reset interval
+                            window.clearInterval(geolocationID);
+                            slidfast.location.track();
+                        } else {
+                            navigator.geolocation.getCurrentPosition(slidfast.location.setPosition, slidfast.location.error, { enableHighAccuracy: true, timeout: 10000 });
+                        }
+                    },
+                    interval); //end setInterval;
+                 console.log('geolocationID' + geolocationID);
+            },
+
+            setPosition : function(position){
+               currentPosition = position;
+               console.log('position ' + position.coords.latitude + ' ' + position.coords.longitude);
+            },
+
+            currentPosition : function(){
+               return currentPosition;
+            },
+
+            error : function(error){
+               switch(error.code)
+               {
+                  case error.TIMEOUT:
+                     console.log('Timeout');
+                     break;
+                  case error.POSITION_UNAVAILABLE:
+                     console.log('Position unavailable');
+                     break;
+                  case error.PERMISSION_DENIED:
+                     console.log('Permission denied');
+                     break;
+                  case error.UNKNOWN_ERROR:
+                     console.log('Unknown error');
+                     break;
+               }
+            }
+
+        };
+
+        slidfast.orientation = slidfast.prototype = {
+
+            init : function(){
+
+            }
+        };
+
         slidfast.html5e = slidfast.prototype = {
 
             supports_local_storage : function() {
@@ -593,6 +674,32 @@
             supports_app_cache : function() {
               try {
                 return 'applicationCache' in window && window['applicationCache'] !== null;
+              } catch (e) {
+                return false;
+              }
+            },
+
+            supports_geolocation : function() {
+              try {
+                return 'geolocation' in navigator && navigator['geolocation'] !== null;
+              } catch (e) {
+                return false;
+              }
+            },
+
+            supports_websocket : function() {
+              try {
+                return 'WebSocket' in window && window['WebSocket'] !== null;
+              } catch (e) {
+                return false;
+              }
+            },
+
+            supports_orientation : function() {
+              try {
+                return 'DeviceOrientationEvent' in window && window['DeviceOrientationEvent'] !== null;
+                 //mozilla
+                 //return 'OrientationEvent' in window && window['OrientationEvent'] !== null;
               } catch (e) {
                 return false;
               }
