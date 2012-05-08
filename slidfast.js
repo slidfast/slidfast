@@ -37,6 +37,8 @@
 
         geo = {on : true, track : false},
 
+        orientationNav = true,
+
         isReady = false,
 
         flipped = false;
@@ -53,6 +55,7 @@
                         singlePageModel = options.singlePageModel;
                         optimizeNetwork = options.optimizeNetwork;
                         geo = options.geo;
+                        orientationNav = options.orientationNav;
                     }
                 }catch(e){
                     alert('Problem with startup options. You must define the page ID at a min. \n Error:' + e)
@@ -75,9 +78,14 @@
                     }
                 }
 
-                if(geo.on){
+                if(geo && geo.on == true){
                    slidfast.location.init(geo);
                 }
+
+                if(orientationNav){
+                   slidfast.orientation.init();
+                }
+
 
             },
 
@@ -657,7 +665,60 @@
         slidfast.orientation = slidfast.prototype = {
 
             init : function(){
+               if (window.DeviceOrientationEvent) {
+                   window.addEventListener("deviceorientation", function( event ) {
+                   //alpha: rotation around z-axis
+                   var rotateDegrees = event.alpha;
+                   //gamma: left to right
+                   var leftToRight = event.gamma;
+                   //beta: front back motion
+                   var frontToBack = event.beta;
 
+                   handleOrientationEvent( frontToBack, leftToRight, rotateDegrees );
+                   }, false);
+               };
+
+                   var handleOrientationEvent = function( frontToBack, leftToRight, rotateDegrees ){
+                       if(leftToRight > 45){
+                           slidfast.ui.slideTo('products-page');
+                       }else if(leftToRight < -30){
+                           slidfast.ui.slideTo('about-page');
+                       };
+                   };
+
+
+
+
+                   /*if (window.DeviceMotionEvent) {
+                        window.addEventListener('devicemotion', deviceMotionHandler, false);
+                   }
+
+                   function deviceMotionHandler(eventData) {
+                   // Grab the acceleration including gravity from the results
+                   var acceleration = eventData.accelerationIncludingGravity;
+
+                   // Display the raw acceleration data
+                   var rawAcceleration = "[x " + Math.round(acceleration.x) + ", y " +
+                   Math.round(acceleration.y) + ", z " + Math.round(acceleration.z) + "]";
+
+                   // Z is the acceleration in the Z axis, and if the device is facing up or down
+                   var facingUp = -1;
+                   if (acceleration.z > 0) {
+                   facingUp = +1;
+                   }
+
+                   // Convert the value from acceleration to degrees acceleration.x|y is the
+                   // acceleration according to gravity, we'll assume we're on Earth and divide
+                   // by 9.81 (earth gravity) to get a percentage value, and then multiply that
+                   // by 90 to convert to degrees.
+                   var tiltLR = Math.round(((acceleration.x) / 9.81) * -90);
+                   var tiltFB = Math.round(((acceleration.y + 9.81) / 9.81) * 90 * facingUp);
+
+
+                   // Apply the 2D rotation and 3D rotation to the image
+                   var rotation = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB) + "deg)";
+                   //document.getElementById("imgLogo").style.webkitTransform = rotation;
+                   }*/
             }
         };
 
@@ -695,15 +756,16 @@
               }
             },
 
+
             supports_orientation : function() {
               try {
                 return 'DeviceOrientationEvent' in window && window['DeviceOrientationEvent'] !== null;
-                 //mozilla
-                 //return 'OrientationEvent' in window && window['OrientationEvent'] !== null;
-              } catch (e) {
+               } catch (e) {
                 return false;
               }
             }
+
+
 
         }
 
