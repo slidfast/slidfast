@@ -13,23 +13,14 @@
     <link rel="stylesheet" media="all" href="../../slidfast.css" />
     <script type="text/javascript" src="../../slidfast.js" ></script>
     <script type="text/javascript">
-
         slidfast({
-        defaultPageID:'home-page',
-        touchEnabled: true,
-        workers: 'worker1'
+            defaultPageID:'home-page',
+            touchEnabled: true,
+            workers: 'worker1.js'
         });
     </script>
 </head>
 <body>
-<div id="log"></div>
-<script id="worker1" type="javascript/worker">
-    // This script won't be parsed by JS engines because its type is javascript/worker.
-    self.onmessage = function(e) {
-      self.postMessage('msg from worker');
-    };
-    // Rest of your worker code goes here.
-</script>
 <div id="browser">
     <nav class="primary">
         <ul>
@@ -45,7 +36,7 @@
 
             <div id="home-page" class="page">
                 <h1>Home Page</h1>
-                <a href="demo/home-detail.html" class="fetch">Find out more about the home page!</a>
+                <div id="log"></div>
             </div>
 
             <div id="products-page" class="page stage-right">

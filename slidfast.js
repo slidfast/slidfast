@@ -805,7 +805,7 @@
 
       slidfast.worker = slidfast.prototype = {
          //
-         init : function(workerid) {
+         init : function(workerurl) {
             function log(msg) {
                // Use a fragment: browser will only render/reflow once.
                var fragment = document.createDocumentFragment();
@@ -815,18 +815,13 @@
                document.querySelector("#log").appendChild(fragment);
             }
 
-            if (slidfast.html5e.supports_blobs) {
-               var bb = new WebKitBlobBuilder();
-               bb.append(document.querySelector('#' + workerid).textContent);
-
-               // Note: window.webkitURL.createObjectURL() in Chrome 10+.
-               var worker = new Worker(window.webkitURL.createObjectURL(bb.getBlob()));
+               var worker = new Worker(workerurl);
                worker.onmessage = function(e) {
                   log("Received: " + e.data);
-               };
+               }
                worker.postMessage(); // Start the worker.
+
             }
-         }
 
       };
 
