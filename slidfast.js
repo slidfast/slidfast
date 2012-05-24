@@ -39,7 +39,7 @@
 
             orientationNav = true,
 
-            workers = null,
+            workers = {script: null, threads: null, callback: null, obj: null},
 
             isReady = false,
 
@@ -89,7 +89,7 @@
                slidfast.orientation.init();
             }
 
-            if (workers) {
+            if (workers && workers.script != null) {
                slidfast.worker.init(workers);
             }
 
@@ -833,8 +833,8 @@
 
       slidfast.worker = slidfast.prototype = {
           //
-          init:function (script,pool,callback) {
-
+          init:function (workers) {
+              //threading concept from www.smartjava.org/examples/webworkers2/
               function Pool(size) {
                   var _this = this;
 
@@ -895,7 +895,6 @@
                   function dummyCallback(event) {
                       // pass to original callback
                       _this.workerTask.callback(event);
-
                       // we should use a seperate thread to add the worker
                       _this.parentPool.freeWorkerThread(_this);
                   }
@@ -909,22 +908,15 @@
                   this.startMessage = msg;
               }
 
+              var pool = new Pool(workers.threads);
+              pool.init();
+              var workerTask = new WorkerTask(workers.script,workers.callback,workers.obj);
+              pool.addWorkerTask(workerTask);
+
               //---------------------------------------------
 
-            function log(msg) {
-               // Use a fragment: browser will only render/reflow once.
-               var fragment = document.createDocumentFragment();
-               fragment.appendChild(document.createTextNode(msg));
-               fragment.appendChild(document.createElement('br'));
 
-               document.querySelector("#log").appendChild(fragment);
-            }
 
-               var worker = new Worker(script);
-               worker.onmessage = function(e) {
-                  //log("Received: " + e.data);
-               };
-               worker.postMessage(); // Start the worker.
 
             }
 

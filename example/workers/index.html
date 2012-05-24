@@ -16,11 +16,20 @@
         slidfast({
             defaultPageID:'home-page',
             touchEnabled: true,
-            workers: {script:'worker1.js', threads:9, callback:workerCallback}
+            workers: {script:'worker1.js', threads:9, callback:workerCallback, obj:{foo:1}}
         });
 
-        var workerCallback = function(){
-            log("Received: " + e.data);
+        function workerCallback(e){
+            log("Received: " + e.data.foo);
+        }
+
+        function log(msg) {
+            // Use a fragment: browser will only render/reflow once.
+            var fragment = document.createDocumentFragment();
+            fragment.appendChild(document.createTextNode(msg));
+            fragment.appendChild(document.createElement('br'));
+
+            document.querySelector("#log").appendChild(fragment);
         }
     </script>
 </head>
