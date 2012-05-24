@@ -16,8 +16,12 @@
         slidfast({
             defaultPageID:'home-page',
             touchEnabled: true,
-            workers: 'worker1.js'
+            workers: {script:'worker1.js', threads:9, callback:workerCallback}
         });
+
+        var workerCallback = function(){
+            log("Received: " + e.data);
+        }
     </script>
 </head>
 <body>
