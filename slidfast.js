@@ -39,7 +39,7 @@
 
             orientationNav = true,
 
-            workers = {script: null, threads: null, callback: null, obj: null},
+            workers = {script: null, threads: null, mycallback: null, obj: null},
 
             isReady = false,
 
@@ -834,6 +834,9 @@
       slidfast.worker = slidfast.prototype = {
           //
           init:function (workers) {
+
+              var mycallback = workers.mycallback;
+
               //threading concept from www.smartjava.org/examples/webworkers2/
               function Pool(size) {
                   var _this = this;
@@ -885,19 +888,15 @@
                       // create a new web worker
                       if (this.workerTask.script != null) {
                           var worker = new Worker(workerTask.script);
-                          worker.addEventListener('message', dummyCallback, false);
-                          worker.postMessage(workerTask.startMessage);
+                          worker.addEventListener('message', function(event){
+                              //getting errors after 3rd thread with...
+                              //_this.workerTask.callback(event);
+                              mycallback(event);
+                              _this.parentPool.freeWorkerThread(_this);
+                          }, false);
+                          worker.postMessage(workerTask.obj);
                       }
                   };
-
-                  // for now assume we only get a single callback from a worker
-                  // which also indicates the end of this worker.
-                  function dummyCallback(event) {
-                      // pass to original callback
-                      _this.workerTask.callback(event);
-                      // we should use a seperate thread to add the worker
-                      _this.parentPool.freeWorkerThread(_this);
-                  }
 
               }
 
@@ -905,12 +904,12 @@
               function WorkerTask(script, callback, msg) {
                   this.script = script;
                   this.callback = callback;
-                  this.startMessage = msg;
+                  this.obj = msg;
               }
 
               var pool = new Pool(workers.threads);
               pool.init();
-              var workerTask = new WorkerTask(workers.script,workers.callback,workers.obj);
+              var workerTask = new WorkerTask(workers.script,mycallback,workers.obj);
               pool.addWorkerTask(workerTask);
 
               //---------------------------------------------

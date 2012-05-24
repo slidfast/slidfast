@@ -13,10 +13,13 @@
     <link rel="stylesheet" media="all" href="../../slidfast.css" />
     <script type="text/javascript" src="../../slidfast.js" ></script>
     <script type="text/javascript">
+
+        var foo = {foo:1};
+
         slidfast({
             defaultPageID:'home-page',
             touchEnabled: true,
-            workers: {script:'worker1.js', threads:9, callback:workerCallback, obj:{foo:1}}
+            workers: {script:'worker1.js', threads:9, mycallback:workerCallback, obj:foo}
         });
 
         function workerCallback(e){
@@ -28,7 +31,6 @@
             var fragment = document.createDocumentFragment();
             fragment.appendChild(document.createTextNode(msg));
             fragment.appendChild(document.createElement('br'));
-
             document.querySelector("#log").appendChild(fragment);
         }
     </script>
