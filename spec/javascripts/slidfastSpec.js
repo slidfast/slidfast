@@ -1,13 +1,15 @@
-describe("Player", function() {
+describe("slidfast", function() {
 
-  var test;
+ var defaultPageID = 'home-page'
 
  beforeEach(function() {
-    test = "test";
-  });
+     slidfast({
+         defaultPageID:defaultPageID
+     });
+ });
 
-  it("should be able to play a Song", function() {
-    expect(test).toEqual("test");
+  it("should perform basic init", function() {
+    expect(slidfast).toBeDefined();
   });
 
  /* describe("when song has been paused", function() {
