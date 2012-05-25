@@ -830,7 +830,7 @@
            }
          }
       };
-
+      var sharedobj = {};
       slidfast.worker = slidfast.prototype = {
           //
           init:function (workers) {
@@ -850,6 +850,8 @@
                       if (_this.workerQueue.length > 0) {
                           // get the worker from the front of the queue
                           var workerThread = _this.workerQueue.shift();
+                          //get an index for tracking
+                          slidfast.worker.obj().index = _this.workerQueue.length;
                           workerThread.run(workerTask);
                       } else {
                           // no free workers,
@@ -894,30 +896,37 @@
                               mycallback(event);
                               _this.parentPool.freeWorkerThread(_this);
                           }, false);
-                          worker.postMessage(workerTask.obj);
+                          worker.postMessage(slidfast.worker.obj());
                       }
                   };
 
               }
 
-              // task to run
               function WorkerTask(script, callback, msg) {
                   this.script = script;
                   this.callback = callback;
+                  console.log(msg);
                   this.obj = msg;
               }
 
               var pool = new Pool(workers.threads);
               pool.init();
-              var workerTask = new WorkerTask(workers.script,mycallback,workers.obj);
+              var workerTask = new WorkerTask(workers.script,mycallback,slidfast.worker.obj());
+
+              //todo, break these out into public API/usage
+              //basic chunking of data per thread/task
               pool.addWorkerTask(workerTask);
+              slidfast.worker.obj().foo = 10;
+              pool.addWorkerTask(workerTask);
+              slidfast.worker.obj().foo = 20;
+              pool.addWorkerTask(workerTask);
+              slidfast.worker.obj().foo = 30;
+              pool.addWorkerTask(workerTask);
+            },
 
-              //---------------------------------------------
-
-
-
-
-            }
+          obj : function () {
+              return sharedobj;
+          }
 
       };
 
