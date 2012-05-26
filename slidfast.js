@@ -88,7 +88,7 @@
             }
 
             //standalone without DOM structure
-            if (geo && geo.on == true) {
+            if (geo && geo.on) {
                  slidfast.location.init(geo);
             }
 
