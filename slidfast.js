@@ -27,23 +27,25 @@
 
             defaultPageID = null,
 
+            focusPage = null,
+
             touchEnabled = false,
 
             singlePageModel = false,
-
-            focusPage = null,
 
             optimizeNetwork = false,
 
             geo = {on : true, track : false},
 
-            orientationNav = true,
+            orientationNav = false,
 
             workers = {script: null, threads: null, mycallback: null, obj: null},
 
             isReady = false,
 
-            flipped = false;
+            flipped = false,
+
+            hashNS = "";
 
       slidfast.core = slidfast.prototype = {
          constructor: slidfast,
@@ -52,22 +54,22 @@
 
             try {
                if (options) {
+                  //setup all the options being passed in in the init
                   defaultPageID = options.defaultPageID;
+                  hashNS = options.hahsNS != null ? options.hashNS : "#sf-";
                   touchEnabled = options.touchEnabled;
                   singlePageModel = options.singlePageModel;
                   optimizeNetwork = options.optimizeNetwork;
-                  geo = options.geo;
                   orientationNav = options.orientationNav;
-                  workers = options.workers;
+
+                  geo = options.geo != null ? options.geo : null;
+                  workers = options.workers != null ? options.workers : null;
                }
             } catch(e) {
-               alert('Problem with startup options. You must define the page ID at a min. \n Error:' + e)
+               alert('Problem with init. Check your options: ' + e)
             }
 
-            slidfast.core.hideURLBar();
-            //hash change
-            slidfast.core.locationChange();
-
+             //depends on proper DOM structure with defaultPageID
             if (touchEnabled) {
                new slidfast.ui.Touch(getElement(defaultPageID));
             }
@@ -81,19 +83,22 @@
                }
             }
 
-            if (geo && geo.on == true) {
-               slidfast.location.init(geo);
-            }
-
             if (orientationNav) {
                slidfast.orientation.init();
+            }
+
+            //standalone without DOM structure
+            if (geo && geo.on == true) {
+                 slidfast.location.init(geo);
             }
 
             if (workers && workers.script != null) {
                slidfast.worker.init(workers);
             }
 
-
+            slidfast.core.hideURLBar();
+            //hash change
+            slidfast.core.locationChange();
          },
 
          hideURLBar: function() {
@@ -105,7 +110,7 @@
 
             window.addEventListener('load', function(e) {
                isReady = true;
-               slidfast.core.start(defaultPageID, touchEnabled);
+               slidfast.core.start();
             }, false);
 
             window.addEventListener('hashchange', function(e) {
@@ -116,20 +121,18 @@
 
          },
 
-         locationChange: function() {
-            if (location.hash === "#" + defaultPageID || location.hash == '') {
-               //slidfast.ui.slideTo(defaultPageID);
-            } else {
-
+         locationChange: function(id) {
+            var targetId = location.hash;
+            if(id){
+                location.hash = hashNS + id;
+            }else if(targetId){
                try {
-                  //todo - give the hash a safe namespace
-                  targetId = location.hash;
-                  //slidfast.ui.slideTo(targetId.replace('#sf-', ''));
+                 console.log(targetId);
+                   //todo implement for backbutton
+//                 slidfast.ui.slideTo(targetId.replace(hashNS, ''));
                } catch(e) {
                   console.log(e);
-                  //alert(e)
                }
-
             }
          },
 
@@ -326,7 +329,7 @@
             try {
                classes = id.className.split(' ');
             } catch(e) {
-               console.log('problem with classname on .page: ' + id)
+               console.log('problem with classname on .page: ' + id.id)
             }
 
             //2.)decide if the incoming page is assigned to right or left
@@ -337,9 +340,8 @@
             var front = getElement('front');
             if (front) {
                var frontNodes = front.getElementsByTagName('*');
-               var i;
-               for (i = 0; i < frontNodes.length; i += 1) {
-                  if (id == frontNodes[i].id && flipped) {
+               for (var i = 0; i < frontNodes.length; i += 1) {
+                  if (id.id == frontNodes[i].id && flipped) {
                      slidfast.ui.flip();
                   }
                }
@@ -359,7 +361,8 @@
             focusPage.className = 'page transition stage-center';
 
             //6. make this transition bookmarkable
-            location.hash = '#sf-' + focusPage.id;
+            //console.log(focusPage.id);
+             slidfast.core.locationChange(focusPage.id);
 
             if (touchEnabled) {
                new slidfast.ui.Touch(focusPage);
@@ -506,6 +509,7 @@
             };
             track.ontouchend = function(event) {
                pageMove(event);
+                //todo - this is a basic example, needs same code as orientationNav
                if (slideDirection == 'left') {
                   slidfast.ui.slideTo('products-page');
                } else if (slideDirection == 'right') {
@@ -976,20 +980,6 @@
          supports_motion : function() {
             try {
                return 'DeviceMotionEvent' in window && window['DeviceMotionEvent'] !== null;
-            } catch (e) {
-               return false;
-            }
-         },
-
-         supports_blobs : function() {
-            try {
-               if ('WebKitBlobBuilder' in window && window['WebKitBlobBuilder'] !== null) {
-                  window.BlobBuilder = WebKitBlobBuilder;
-                  return true;
-               } else if ('MozBlobBuilder' in window && window['MozBlobBuilder'] !== null) {
-                  window.BlobBuilder = MozBlobBuilder;
-                  return true;
-               }
             } catch (e) {
                return false;
             }
