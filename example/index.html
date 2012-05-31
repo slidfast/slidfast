@@ -17,12 +17,10 @@
 
 slidfast({
    defaultPageID:'home-page',
-   touchEnabled: true,
+   touchEnabled: false,
    singlePageModel: true,
    optimizeNetwork: true
 });
-
-
 </script>
 
 </head>
@@ -33,7 +31,7 @@ slidfast({
             <li><a href="#sf-home-page" onclick="slidfast.ui.slideTo('home-page')">Home</a></li>
             <li><a href="#sf-products-page" onclick="slidfast.ui.slideTo('products-page')">Products</a></li>
             <li><a href="#sf-about-page" onclick="slidfast.ui.slideTo('about-page')">About</a></li>
-            <li><a href="#sf-contact-page" onclick="slidfast.ui.flip('contact-page')">Contact</a></li>
+            <li id="flip-button"><a href="#sf-contact-page" onclick="slidfast.ui.flip('contact-page')">Contact</a></li>
         </ul>
     </nav>
 
@@ -67,6 +65,14 @@ slidfast({
 
     </div>
 </div>
-
+<script type="text/javascript">
+var ua = navigator.userAgent.toLowerCase();
+var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+if(isAndroid) {
+  //hide any 360 flip stuff for android
+  document.querySelector("#back").style.display = 'none';
+  document.querySelector("#flip-button").style.display = 'none';
+}
+</script>
 </body>
 </html>
