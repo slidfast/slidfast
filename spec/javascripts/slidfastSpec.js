@@ -8,9 +8,12 @@ describe("slidfast", function() {
      });
  });
 
-  it("should perform basic init", function() {
+describe("slidfast init", function() {
+  it("makes HTML5 easy", function() {
     expect(slidfast).toBeDefined();
   });
+});
+
 
  /* describe("when song has been paused", function() {
     beforeEach(function() {
