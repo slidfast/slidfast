@@ -368,7 +368,6 @@
                 focusPage.className = 'page transition stage-center';
 
                 //6. make this transition bookmarkable
-                //console.log(focusPage.id);
                 slidfast.core.locationChange(focusPage.id);
 
                 if (touchEnabled) {
@@ -636,7 +635,7 @@
 
         };
 
-        var geolocationID, currentPosition, interval;
+        var geolocationID, currentPosition, interval, callback;
         slidfast.location = slidfast.prototype = {
 
             init:function (geo) {
@@ -644,6 +643,7 @@
                     if (geo.track) {
                         slidfast.location.track();
                         interval = geo.interval ? geo.interval : 10000;
+                        callback = geo.callback;
                     } else {
                         if (currentPosition === undefined) {
                             navigator.geolocation.getCurrentPosition(function (position) {
@@ -676,6 +676,7 @@
             setPosition:function (position) {
                 currentPosition = position;
                 console.log('position ' + position.coords.latitude + ' ' + position.coords.longitude);
+                callback('position ' + position.coords.latitude + ' ' + position.coords.longitude);
             },
 
             currentPosition:function () {
@@ -958,7 +959,7 @@
                     return false;
                 }
             },
-
+            //geolocation cannot be accessed with dot notation in iOS5... will prevent page caching
             supports_geolocation:function () {
                 try {
                     return 'geolocation' in navigator && navigator['geolocation'] !== null;
