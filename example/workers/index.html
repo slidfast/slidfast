@@ -17,14 +17,13 @@
 
         slidfast({
             defaultPageID:'home-page',
-            touchEnabled: true,
             workers: {script:'worker1.js', threads:9, mycallback:workerCallback}
         });
 
         slidfast.worker.obj().foo = 1;
 
         function workerCallback(e){
-            document.querySelector("#log tbody").innerHTML += "<tr><td>" + e.data.foo + "</td><td>" + e.data.index + "</td></tr>";
+            document.querySelector("#log tbody").innerHTML += "<tr><td class="+ 'a' + e.data.index +">" + e.data.foo + "</td><td class="+ 'a' + e.data.index +">" + e.data.index + "</td></tr>";
         }
 
     </script>
@@ -45,7 +44,7 @@
 
             <div id="home-page" class="page">
                 <h1>Home Page</h1>
-                <table id="log" style="border:1px solid black">
+                <table id="log" class="worker-table">
                     <thead>
                         <tr>
                             <td>Data</td>
@@ -60,12 +59,12 @@
 
             <div id="products-page" class="page stage-right">
                 <h1>Products Page</h1>
-                <a href="demo/product-listing.html" class="fetch">We got some product listings fer ya!</a>
+                <a href="../demo/product-listing.html" class="fetch">We got some product listings fer ya!</a>
             </div>
 
             <div id="about-page" class="page stage-left">
                 <h1>About Page</h1>
-                <a href="demo/about-cto.html">You know you want to know more about us!</a>
+                <a href="../demo/about-cto.html">You know you want to know more about us!</a>
             </div>
         </div>
 

@@ -38,3 +38,44 @@ nav.primary > ul li a {
     width: 100%;
     height: 100%;
 }
+
+.worker-table {
+    border:  1px solid black;
+}
+
+.worker-table tr td {
+    border:  1px solid black
+}
+
+.worker-table tr td.a1 {
+    background-color: #f5f5dc;
+}
+
+.worker-table tr td.a2 {
+    background-color: #bc8f8f;
+}
+
+.worker-table tr td.a3 {
+    background-color: red;
+}
+
+.worker-table tr td.a4 {
+    background-color: #adff2f;
+}
+
+.worker-table tr td.a5 {
+    background-color: #00ffff;
+}
+
+.worker-table tr td.a6 {
+    background-color: white;
+}
+
+.worker-table tr td.a7 {
+    background-color: green;
+}
+
+.worker-table tr td.a8 {
+    background-color: yellow;
+}
+
