@@ -3,7 +3,7 @@
  * www.slidfast.com
  *
  * Copyright (c) Wesley Hales
- * Available under the MIT licenses
+ * Available under the ASL v2.0 license (see LICENSE)
  */
 
 //Known issues:
