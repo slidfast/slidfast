@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>slidfast by slidfast</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>slidfast</h1>
+        <p></p>
+        <p class="view"><a href="https://github.com/slidfast/slidfast">View the Project on GitHub <small>slidfast/slidfast</small></a></p>
+        <ul>
+          <li><a href="https://github.com/slidfast/slidfast/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/slidfast/slidfast/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/slidfast/slidfast">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>slidfast</h1>
+
+<p><a href="http://travis-ci.org/slidfast/slidfast"><img src="https://secure.travis-ci.org/slidfast/slidfast.png" alt="Build Status"></a></p>
+
+<p>slidfast is a learning framework created for the book <a href="http://shop.oreilly.com/product/0636920024088.do">HTML5 Architecture</a> on O'Reilly Media.
+All the examples and code are explained in detail in the book.</p>
+
+<p>This framework is well commented and documented so that you can learn. It is focused on the 5
+HTML5 or W3C specifications that are widely supported across all modern browsers:</p>
+
+<ul>
+<li>Web Storage</li>
+<li>Web Socket</li>
+<li>Geolocation</li>
+<li>Orientation</li>
+<li>Web Workers</li>
+</ul><p>This means that I'm only using native API's provided by the browsers. That's right kids, no jQuery. All bloat has been removed so that we can
+truly learn what is going on and get the maximum performance on our target browsers.</p>
+
+<h2>Getting started</h2>
+
+<p>There are quite a few <a href="/slidfast/slidfast/tree/master/example/">examples</a> in the root directory to get you started.</p>
+
+<ul>
+<li>
+<a href="/slidfast/slidfast/tree/master/example/index.html">slide and rotate</a> - is the basic example of using CSS3 transitions and AJAX loading to navigate within a single DOM. Also uses localStorage to store the dynamically loaded HTML.</li>
+<li>
+<a href="/slidfast/slidfast/tree/master/example/touch/">touch</a> - shows how to add touch events for navigation</li>
+<li>
+<a href="/slidfast/slidfast/tree/master/example/orientation">orientation</a> - shows how to perform basic navigation events with the Orientation API</li>
+<li>
+<a href="/slidfast/slidfast/tree/master/example/workers">workers</a> - Uses Web Workers to create a thread pool and parallel processing</li>
+<li>
+<a href="/slidfast/slidfast/tree/master/example/geo">geo</a> - shows how to track a users location with common workarounds for iOS5</li>
+</ul><h2>Basic Init</h2>
+
+<p>Include slidfast.js and slidfast.css in your html, then call:</p>
+
+<div class="highlight">
+<pre><span class="nx">slidfast</span><span class="p">({</span>
+   <span class="nx">defaultPageID</span><span class="o">:</span><span class="s1">'home-page'</span><span class="p">,</span>  <span class="c1">//required</span>
+   <span class="nx">touchEnabled</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+   <span class="nx">singlePageModel</span><span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+</pre>
+</div>
+
+
+<h2>Notes</h2>
+
+<p>There's a million ways this can be improved and made to support all web browsers. Right now it's mostly supporting WebKit(100%), Mozilla(50%), and the others need impl and testing.</p>
+
+<h2>Fun Facts</h2>
+
+<ul>
+<li>I created this framework while writing <a href="http://www.html5rocks.com/en/mobile/optimization-and-performance/">this HTML5Rocks article</a>
+</li>
+<li>It's used within the <a href="https://github.com/richfaces/components/tree/develop/mobile-compatibility">JBoss Richfaces enterprise mobile offering</a>.</li>
+<li>This framework is built using the same JavaScript structure as jQuery :) compare the sources and you'll see what I mean. So you can easily turn any part of it into a plugin.</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/slidfast">slidfast</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
