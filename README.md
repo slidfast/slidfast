@@ -17,12 +17,12 @@ This means that I'm only using native API's provided by the browsers. That's rig
 truly learn what is going on and get the maximum performance on our target browsers.
 
 ## Getting started
-There are quite a few [examples](/slidfast/slidfast/example/) in the root directory to get you started.
-* [slide and rotate](/slidfast/slidfast/example/index.html) - is the basic example of using CSS3 transitions and AJAX loading to navigate within a single DOM. Also uses localStorage to store the dynamically loaded HTML.
-* [touch](/slidfast/slidfast/example/touch/) - shows how to add touch events for navigation
-* [orientation](/slidfast/slidfast/example/orientation) - shows how to perform basic navigation events with the Orientation API
-* [workers](/slidfast/slidfast/example/workers) - Uses Web Workers to create a thread pool and parallel processing
-* [geo](/slidfast/slidfast/example/geo) - shows how to track a users location with common workarounds for iOS5
+There are quite a few [examples](/slidfast/slidfast/tree/master/example/) in the root directory to get you started.
+* [slide and rotate](/slidfast/slidfast/tree/master/example/index.html) - is the basic example of using CSS3 transitions and AJAX loading to navigate within a single DOM. Also uses localStorage to store the dynamically loaded HTML.
+* [touch](/slidfast/slidfast/tree/master/example/touch/) - shows how to add touch events for navigation
+* [orientation](/slidfast/slidfast/tree/master/example/orientation) - shows how to perform basic navigation events with the Orientation API
+* [workers](/slidfast/slidfast/tree/master/example/workers) - Uses Web Workers to create a thread pool and parallel processing
+* [geo](/slidfast/slidfast/tree/master/example/geo) - shows how to track a users location with common workarounds for iOS5
 
 ## Basic Init
 Include slidfast.js and slidfast.css in your html, then call:
