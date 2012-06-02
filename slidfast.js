@@ -732,7 +732,7 @@
         var handleOrientationEvent = function (frontToBack, leftToRight, rotateDegrees) {
           //on each movement, we're controlling how the current focusPage moves
           var curTransform = new window.WebKitCSSMatrix(window.getComputedStyle(focusPage).webkitTransform);
-//          focusPage.innerHTML = leftToRight;
+          focusPage.innerHTML = leftToRight;
           focusPage.style.webkitTransform = 'translate3d(' + leftToRight * 5 + 'px, 0, 0)';
           focusPage.style.WebkitTransition = 'all .5s ease-out';
           detecttilt(leftToRight);
