@@ -967,7 +967,6 @@
         }
       },
 
-
       supports_orientation:function () {
         try {
           return 'DeviceOrientationEvent' in window && window['DeviceOrientationEvent'] !== null;
