@@ -1025,7 +1025,7 @@
         frame.setAttribute("id", "temp-frame");
         frame.setAttribute("name", "temp-frame");
         frame.setAttribute("seamless", "");
-        frame.setAttribute("sandbox", "");
+        frame.setAttribute("sandbox", "allow-same-origin");
         frame.style.display = 'none';
         document.documentElement.appendChild(frame);
       }
