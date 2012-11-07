@@ -61,12 +61,13 @@ slidfast({
     </div>
 </div>
 <script type="text/javascript">
+//hide the flip functionality on certain devices/browsers
 var ua = navigator.userAgent.toLowerCase();
-var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-if(isAndroid) {
-  //hide any 360 flip stuff for android
-  document.querySelector("#back").style.display = 'none';
-  document.querySelector("#flip-button").style.display = 'none';
+var hidestuff = ua.indexOf("android") > -1 || ua.indexOf("opera") > -1  || ua.indexOf("fennec") > -1;
+if(hidestuff) {
+    //hide any 360 flip stuff
+    document.querySelector("#back").style.display = 'none';
+    document.querySelector("#flip-button").style.display = 'none';
 }
 </script>
 </body>

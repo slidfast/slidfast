@@ -12,17 +12,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 <link rel="stylesheet" media="all" href="demo.css" />
 <link rel="stylesheet" media="all" href="../slidfast.css" />
-<script type="text/javascript" src="../slidfast.js" ></script>
-<script type="text/javascript">
-
-slidfast({
-   defaultPageID:'home-page',
-   touchEnabled: false,
-   singlePageModel: true,
-   optimizeNetwork: true
-});
-</script>
-
 </head>
 <body>
 <div id="browser">
@@ -65,11 +54,21 @@ slidfast({
 
     </div>
 </div>
+<script type="text/javascript" src="../slidfast.js"></script>
 <script type="text/javascript">
+
+    slidfast({
+        defaultPageID:'home-page',
+        touchEnabled: false,
+        singlePageModel: true,
+        optimizeNetwork: true
+    });
+
+//hide the flip functionality on certain devices/browsers
 var ua = navigator.userAgent.toLowerCase();
-var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-if(isAndroid) {
-  //hide any 360 flip stuff for android
+var hidestuff = ua.indexOf("android") > -1 || ua.indexOf("opera") > -1  || ua.indexOf("fennec") > -1;
+if(hidestuff) {
+  //hide any 360 flip stuff
   document.querySelector("#back").style.display = 'none';
   document.querySelector("#flip-button").style.display = 'none';
 }
