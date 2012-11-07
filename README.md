@@ -17,7 +17,7 @@ This means that we're only using native API's provided by the browsers. That's r
 truly learn what is going on and get the maximum performance on our target browsers.
 
 ## Getting started
-There are quite a few live examples to get you started ([source here](/slidfast/slidfast/example/)):
+There are quite a few live examples to get you started ([source here](/slidfast/slidfast/tree/master/example)):
 * [CSS3 - slide and rotate](http://www.html5e.org/example/index.html) - is the basic example of using CSS3 transitions and AJAX loading to navigate within a single DOM.
 * [CSS3 - touch](http://www.html5e.org/example/touch/) - shows how to add touch events for navigation
 * [HTML5 - Orientation](http://www.html5e.org/example/orientation/) - shows how to perform basic navigation events with the Orientation API
