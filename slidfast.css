@@ -60,6 +60,7 @@ UX Utils
     -moz-transition-duration: .5s;
     -webkit-transition-duration: .5s;
     -o-transition-duration: .5s;
+    transition-duration: .5s;
 }
 
 /*************************************************
@@ -77,17 +78,24 @@ Flip Transition
     -moz-backface-visibility: hidden;
     -moz-transform-style: preserve-3d;
     -moz-transition-duration: .5s;
+    -o-backface-visibility: hidden;
+    -o-transform-style: preserve-3d;
+    -o-transition-duration: .5s;
 }
 
 .normal {
     -webkit-transform: rotateY(0deg);
     -moz-transform:  rotateY(0deg);
+    -o-transform:  rotateY(0deg);
 }
 
 .flipped {
     -webkit-user-select: element;
     -webkit-transform: rotateY(180deg);
+    -moz-user-select: element;
     -moz-transform:  rotateY(180deg);
+    -o-user-select: element;
+    -o-transform:  rotateY(180deg);
 }
 
 /*************************************************
