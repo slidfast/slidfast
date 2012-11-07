@@ -294,13 +294,13 @@
             if (link.hasAttribute('href') &&
               //'#' in the href tells us that this page is already loaded in the dom - and
               // that it links to a mobile transition/page
-              !(/[\#]/g).test(link.href)) {
+              !(/[\#]/g).test(link.href)) { //alert((classname === undefined && link.className === '') + '---' + classname + '---- ' + link.className);
               //check for an explicit class name setting to filter this link
-              if (classname !== null) {
+              if (classname !== undefined) {
                 if (link.className.indexOf(classname) >= 0) {
                   links.push(link);
                 }
-              } else if (classname === null && link.className === '') {
+              } else if (classname === undefined && link.className === '') {
                 //return unfiltered list
                 links.push(link);
               }
@@ -625,11 +625,13 @@
             return false;
           };
         };
-        for (i = 0; i < disabledLinks.length; i += 1) {
-          if (disabledLinks[i].onclick === null) {
-            //alert user we're not online
-            disabledLinks[i].onclick = onclickHelper(disabledLinks[i].href);
 
+        for (i = 0; i < disabledLinks.length; i += 1) {
+
+          if (disabledLinks[i].onclick === null) {
+              //alert user we're not online
+              //disabledLinks[i].onclick = onclickHelper(disabledLinks[i].href);
+              disabledLinks[i].setAttribute("onclick","alert('This app is currently offline and cannot access the hotness');return false;");
           }
         }
       }
