@@ -18,7 +18,7 @@ truly learn what is going on and get the maximum performance on our target brows
 
 ## Getting started
 There are quite a few live examples [source here](/slidfast/slidfast/tree/master/example/) to get you started.
-* [CSS3 - slide and rotate](http://www.html5e.org/example/index.html) - is the basic example of using CSS3 transitions and AJAX loading to navigate within a single DOM. Also uses localStorage to store the dynamically loaded HTML.
+* [CSS3 - slide and rotate](http://www.html5e.org/example/index.html) - is the basic example of using CSS3 transitions and AJAX loading to navigate within a single DOM.
 * [CSS3 - touch](http://www.html5e.org/example/touch/) - shows how to add touch events for navigation
 * [HTML5 - Orientation](http://www.html5e.org/example/orientation/) - shows how to perform basic navigation events with the Orientation API
 * [HTML5 - Web Workers](http://www.html5e.org/example/workers/) - Uses Web Workers to create a thread pool and parallel processing
@@ -30,8 +30,13 @@ Include slidfast.js and slidfast.css in your html, then call:
 ```javascript
 slidfast({
    defaultPageID:'home-page',  //required
-   touchEnabled: true,
-   singlePageModel: true
+   touchEnabled: true, //optional - gives pages native like touch and swipe functionality
+   singlePageModel: true, //optional - allows pre-fetching of external links
+   optimizeNetwork: true, //changes loading strategy based on network type (3G, Edge, wifi, etc...)
+   orientationNav: true, //Navigates pages when user tilts device with accelerometer
+   geo: {on:true,track:true,interval:10000,callback:geoCallback}, //basic Geolocation tracking
+   workers: {script:'worker1.js', threads:9, mycallback:workerCallback} // Web Worker thread pool
+
 });
 ```
 
