@@ -621,7 +621,7 @@
         //helper for onlcick below
         var onclickHelper = function (e) {
           return function (f) {
-            alert('This app is currently offline and cannot access the hotness');
+            alert('This app is currently offline and cannot access the hotness!');
             return false;
           };
         };
@@ -630,8 +630,7 @@
 
           if (disabledLinks[i].onclick === null) {
               //alert user we're not online
-              //disabledLinks[i].onclick = onclickHelper(disabledLinks[i].href);
-              disabledLinks[i].setAttribute("onclick","alert('This app is currently offline and cannot access the hotness');return false;");
+              disabledLinks[i].onclick = onclickHelper(disabledLinks[i].href);
           }
         }
       }
