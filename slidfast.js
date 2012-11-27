@@ -99,6 +99,8 @@
         slidfast.core.hideURLBar();
         //hash change
         slidfast.core.locationChange();
+
+        slidfast.core.cacheExternalImage();
       },
 
       hideURLBar:function () {
@@ -235,30 +237,46 @@
         }
       },
 
-      cacheExternalImage:function (url) {
-        var img = new Image(); // width, height values are optional params
-        //remote server has to support CORS
-        img.crossOrigin = '';
-        img.src = url;
-        img.onload = function () {
-          if (img.complete) {
-            //this is where you could proxy server side
-            load(img);
-          }
-        };
-
-        function load(img) {
-          var canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-
-          // Copy the image contents to the canvas
-          var ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          img.src = ctx.canvas.toDataURL("image/png");
+      cacheExternalImage:function () {
+        var images = document.getElementsByTagName('img');
+        for(var i = 0; i < images.length; i += 1){
+            if(images[i].hasAttribute("data-image")){
+                cacheImage(images[i]);
+            }
         }
+        function cacheImage(img){
+            var imageURL = img.getAttribute("data-url");
+            //check for image already in storage
+            if(!localStorage[imageURL]){
+                //disable this attribute to see DOM security exception
+                img.crossOrigin = '';
 
-        return img;
+                img.src = imageURL;
+                img.onload = function () {
+                  if (img.complete) {
+                    //onload complete, draw into canvas element
+                    load(img);
+                  }
+                };
+            }else{
+                //we have already downloaded it, so use custom cache
+                img.src=localStorage[imageURL];
+            }
+
+            function load(img) {
+                //create canvase element with correct width and height
+                var canvas = document.createElement("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                // Copy the image contents to the canvas
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+                img.src = ctx.canvas.toDataURL("image/png");
+                //store into localstorage
+                localStorage[imageURL] = img.src;
+            }
+        }
       },
 
       fetchAndCache:function (async) {
