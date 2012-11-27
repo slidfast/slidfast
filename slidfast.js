@@ -35,11 +35,13 @@
 
       optimizeNetwork = false,
 
-      geo = {on: true, track: false},
+      geo = {on:true, track:false},
 
       orientationNav = false,
 
-      workers = {script: null, threads: null, mycallback: null, obj: null},
+      workers = {script:null, threads:null, mycallback:null, obj:null},
+
+      cacheImages = false,
 
       isReady = false,
 
@@ -48,9 +50,9 @@
       hashNS = "";
 
     slidfast.core = slidfast.prototype = {
-      constructor: slidfast,
+      constructor:slidfast,
 
-      start: function () {
+      start:function () {
 
         try {
           if (options) {
@@ -61,12 +63,12 @@
             singlePageModel = options.singlePageModel;
             optimizeNetwork = options.optimizeNetwork;
             orientationNav = options.orientationNav;
-
+            cacheImages = options.cacheImages;
             geo = options.geo !== null ? options.geo : null;
             workers = options.workers !== null ? options.workers : null;
           }
         } catch (e) {
-          alert('Problem with init. Check your options: ' + e);
+          //alert('Problem with init. Check your options: ' + e);
         }
 
         //depends on proper DOM structure with defaultPageID
@@ -99,6 +101,10 @@
         slidfast.core.hideURLBar();
         //hash change
         slidfast.core.locationChange();
+
+        if (cacheImages) {
+          slidfast.core.cacheExternalImage();
+        }
       },
 
       hideURLBar:function () {
@@ -130,12 +136,12 @@
             //todo implement for backbutton
             //slidfast.ui.slideTo(targetId.replace(hashNS, ''));
           } catch (e) {
-            console.log(e);
+            //console.log(e);
           }
         }
       },
 
-      ajax: function (url, callback, async) {
+      ajax:function (url, callback, async) {
         var req = init();
         req.onreadystatechange = processRequest;
 
@@ -235,37 +241,53 @@
         }
       },
 
-      cacheExternalImage:function (url) {
-        var img = new Image(); // width, height values are optional params
-        //remote server has to support CORS
-        img.crossOrigin = '';
-        img.src = url;
-        img.onload = function () {
-          if (img.complete) {
-            //this is where you could proxy server side
-            load(img);
+      cacheExternalImage:function () {
+        var images = document.getElementsByTagName('img');
+        for (var i = 0; i < images.length; i += 1) {
+          if (images[i].hasAttribute("data-image")) {
+            cacheImage(images[i]);
           }
-        };
-
-        function load(img) {
-          var canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-
-          // Copy the image contents to the canvas
-          var ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          img.src = ctx.canvas.toDataURL("image/png");
         }
+        function cacheImage(img) {
+          var imageURL = img.getAttribute("data-url");
+          //check for image already in storage
+          if (!localStorage[imageURL]) {
+            //disable this attribute to see DOM security exception
+            img.crossOrigin = '';
 
-        return img;
+            img.src = imageURL;
+            img.onload = function () {
+              if (img.complete) {
+                //onload complete, draw into canvas element
+                load(img);
+              }
+            };
+          } else {
+            //we have already downloaded it, so use custom cache
+            img.src = localStorage[imageURL];
+          }
+
+          function load(img) {
+            //create canvase element with correct width and height
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            // Copy the image contents to the canvas
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            img.src = ctx.canvas.toDataURL("image/png");
+            //store into localstorage
+            localStorage[imageURL] = img.src;
+          }
+        }
       },
 
       fetchAndCache:function (async) {
         var links = slidfast.core.getUnconvertedLinks(document, 'fetch');
 
         var i;
-        var insertPage = function() {
+        var insertPage = function () {
           var text = arguments[0];
           var url = arguments[1];
           //insert the new mobile page into the DOM
@@ -629,8 +651,8 @@
         for (i = 0; i < disabledLinks.length; i += 1) {
 
           if (disabledLinks[i].onclick === null) {
-              //alert user we're not online
-              disabledLinks[i].onclick = onclickHelper(disabledLinks[i].href);
+            //alert user we're not online
+            disabledLinks[i].onclick = onclickHelper(disabledLinks[i].href);
           }
         }
       }
@@ -741,7 +763,7 @@
 
         var keepgoing = true, pagehistory = [];
 
-        var pagestate = function(pages, className) {
+        var pagestate = function (pages, className) {
           var that = {};
           that.count = 0;
           that.pages = pages;
@@ -1010,7 +1032,7 @@
 
     var listToArray = function (obj) {
       var array = [];
-      [].forEach.call(obj, function(v, i) {
+      [].forEach.call(obj, function (v, i) {
         array[i] = obj[i];
       });
       return array;

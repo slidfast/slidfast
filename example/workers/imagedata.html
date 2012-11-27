@@ -1,0 +1,162 @@
+
+<!-- saved from url=(0046)http://www.smartjava.org/examples/webworkers2/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Canvas tricks</title>
+    <script type="text/javascript" src="./image_lib/color-thief.js"></script>
+    <script type="text/javascript" src="./image_lib/quantize.js"></script>
+    <script type="text/javascript" src="./image_lib/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="./image_lib/thread-pool.js"></script>
+
+</head>
+<body id="main">
+<div style="display: inline;">
+    <img src="./image_lib/stella.png" id="source">
+</div>
+
+<div id="target" style="display: inline;">
+    <canvas width="600" height="600" id="targetCanvas"></canvas></div>
+
+<script type="text/javascript">
+
+    // some global shared variables
+    var targetContext;
+    var worker;
+    var bulletSize = 20;
+    var total = 0;
+    var count = 0;
+    var starttime = 0;
+
+    var pool = new Pool(8);
+    pool.init();
+
+    // start processing when the document is loaded.
+    $(document).ready(function () {
+
+        // wait for the image to be loaded, before we start processing it.
+        $("#source").load(function () {
+
+            // determine size of image
+            var imgwidth = $(this).width();
+            var imgheight = $(this).height();
+
+            // create a canvas and make context available
+            var targetCanvas = createTargetCanvas(imgwidth, imgheight);
+            targetContext = targetCanvas.getContext("2d");
+
+            // render elements
+            starttime = new Date().getTime();
+            renderElements(imgwidth, imgheight, $(this).get()[0]);
+        });
+    });
+
+    // defines a workpacke object that can be sent to the worker
+    function workPackage() {
+        this.data = [];
+        this.pixelCount = 0;
+        this.colors = 0;
+        this.x = 0;
+        this.y = 0;
+
+        this.result = [0, 0, 0];
+    }
+
+    function callback(event) {
+
+        count++;
+
+        if (count == total) {
+            var currentTime = new Date().getTime();
+            console.log("Processing done: " + (currentTime - starttime));
+        }
+
+
+
+        var wp = event.data;
+
+        // get the colors
+        var colors = wp.result;
+
+        drawRectangle(targetContext, wp.x, wp.y, bulletSize, colors[0]);
+        //drawCircle(targetContext, wp.x, wp.y, bulletSize, colors[0]);
+
+    }
+
+    // process the image by splitting it in parts and sending it to the worker
+    function renderElements(imgwidth, imgheight, image) {
+        // determine image grid size
+        var nrX = Math.round(imgwidth / bulletSize);
+        var nrY = Math.round(imgheight / bulletSize);
+
+        // how much to process
+        total = nrX * nrY;
+
+        // iterate through all the parts of the image
+        for (var x = 0; x < nrX; x++) {
+            for (var y = 0; y < nrX; y++) {
+                // create a canvas element we use for temporary rendering
+                var canvas2 = document.createElement('canvas');
+                canvas2.width = bulletSize;
+                canvas2.height = bulletSize;
+                var context2 = canvas2.getContext('2d');
+                // render part of the image for which we want to determine the dominant color
+                context2.drawImage(image, x * bulletSize, y * bulletSize, bulletSize, bulletSize, 0, 0, bulletSize, bulletSize);
+
+                // get the data from the image
+                var data = context2.getImageData(0, 0, bulletSize, bulletSize).data
+                // convert data, which is a canvas pixel array, to a normal array
+                // since we can't send the canvas array to a webworker
+                var dataAsArray = [];
+                for (var i = 0; i < data.length; i++) {
+                    dataAsArray.push(data[i]);
+                }
+
+                // create a workpackage
+                var wp = new workPackage();
+                wp.colors = 5;
+                wp.data = dataAsArray;
+                wp.pixelCount = bulletSize * bulletSize;
+                wp.x = x;
+                wp.y = y;
+
+                // send to our worker.
+                //     worker.postMessage(wp);
+
+
+                var workerTask = new WorkerTask('extractMainColor.js',callback,wp);
+                pool.addWorkerTask(workerTask);
+            }
+        }
+    }
+
+    // create the target canvas where the result will be rendered
+    function createTargetCanvas(imgwidth, imgheight) {
+        // create target canvas, with the correct size
+        return $("<canvas/>")
+                .attr("width", imgwidth)
+                .attr("height", imgheight)
+                .attr("id", "targetCanvas")
+                .appendTo("#target").get()[0];
+    }
+
+    // draw a rectangle on the supplied context
+    function drawRectangle(targetContext, x, y, bulletSize, colors) {
+        targetContext.beginPath();
+        targetContext.rect(x * bulletSize, y * bulletSize, bulletSize, bulletSize);
+        targetContext.fillStyle = "rgba(" + colors + ",1)";
+        targetContext.fill();
+    }
+
+    // draw a circle on the supplied context
+    function drawCircle(targetContext, x, y, bulletSize, colors) {
+        var centerX = x * bulletSize + bulletSize / 2;
+        var centerY = y * bulletSize + bulletSize / 2;
+        var radius = bulletSize / 2;
+
+        targetContext.beginPath();
+        targetContext.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        targetContext.fillStyle = "rgba(" + colors + ",1)";
+        targetContext.fill();
+    }
+</script>
+
+</body></html>

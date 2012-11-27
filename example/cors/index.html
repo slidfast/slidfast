@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>HTML5 Architecture</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+<!-- enable full-screen mode -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<!-- controls the appearance of the status bar in full-screen mode -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="stylesheet" media="all" href="../demo.css" />
+    <link rel="stylesheet" media="all" href="../../slidfast.css" />
+
+</head>
+<body>
+<div id="browser">
+    <nav class="primary">
+        <ul>
+            <li><a href="#sf-home-page" onclick="slidfast.ui.slideTo('home-page')">Home</a></li>
+            <li><a href="#sf-products-page" onclick="slidfast.ui.slideTo('products-page')">Products</a></li>
+            <li><a href="#sf-about-page" onclick="slidfast.ui.slideTo('about-page')">About</a></li>
+            <li id="flip-button"><a href="#sf-contact-page" onclick="slidfast.ui.flip('contact-page')">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div id="page-container">
+
+        <div id="front" class="normal">
+
+            <div id="home-page" class="page">
+                <h1>You don't always need CORS to create data urls</h1>
+                <img id="myimage" data-url="https://lh6.googleusercontent.com/-v3Lkp3sid0g/UG4Gg_tk9_I/AAAAAAAAH3g/63gFxJSuslk/s377/image.jpg" data-image="cache"/>
+            </div>
+
+            <div id="products-page" class="page stage-right">
+                <h1>But without CORS header, you have a tainted canvas object</h1>
+                <img id="tainted-canvas" data-url="http://lolsheaven.com/wp-content/uploads/2012/11/The-Creator-of-McAfee-is-Wanted-for-Murder.jpg" data-image="cache"/>
+            </div>
+
+            <div id="about-page" class="page stage-left">
+                <h1>About Page</h1>
+            </div>
+        </div>
+        <div id="back" class="flipped">
+
+            <div id="contact-page" class="page">
+                <h1>Contact Page</h1>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript" src="../../slidfast.js" ></script>
+<script type="text/javascript">
+
+    slidfast({
+        defaultPageID:'home-page',
+        touchEnabled: false,
+        singlePageModel: true,
+        optimizeNetwork: true,
+        cacheImages: true
+    });
+
+//hide the flip functionality on certain devices/browsers
+var ua = navigator.userAgent.toLowerCase();
+var hidestuff = ua.indexOf("android") > -1 || ua.indexOf("opera") > -1  || ua.indexOf("fennec") > -1;
+if(hidestuff) {
+  //hide any 360 flip stuff
+  document.querySelector("#back").style.display = 'none';
+  document.querySelector("#flip-button").style.display = 'none';
+}
+</script>
+</body>
+</html>
